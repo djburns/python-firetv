@@ -169,7 +169,7 @@ class FireTV:
         :param cmd: Input command.
         """
         if not self._adb:
-            return
+            self.connect()
         self._adb.Shell('input {0}'.format(cmd))
 
     def _key(self, key):
@@ -187,7 +187,7 @@ class FireTV:
         :returns: Dump, optionally grepped.
         """
         if not self._adb:
-            return
+            self.connect()
         if grep:
             return self._adb.Shell('dumpsys {0} | grep {1}'.format(service, grep))
         return self._adb.Shell('dumpsys {0}'.format(service))
@@ -209,7 +209,7 @@ class FireTV:
         :returns: List of matching fields
         """
         if not self._adb:
-            return
+            self.connect()
         result = []
         ps = self._adb.StreamingShell('ps')
         try:
@@ -222,7 +222,6 @@ class FireTV:
             return result
         except InvalidChecksumError as e:
             print e
-            self.connect()
             raise IOError
 
     def _get_packages(self):
@@ -231,7 +230,7 @@ class FireTV:
         :returns: List of 3rd party apps
         """
         if not self._adb:
-            return
+            self.connect()
         result = []
         apps = self._adb.StreamingShell('pm list packages -3')
         try:
@@ -245,6 +244,5 @@ class FireTV:
             return result
         except InvalidChecksumError as e:
             print e
-            self.connect()
             raise IOError
 
