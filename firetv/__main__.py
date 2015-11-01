@@ -137,6 +137,15 @@ def get_app_state(device_id, app_id):
         abort(404)
     return jsonify(status=devices[device_id].app_state(app_id))
 
+@app.route('/devices/<device_id>/apps/installed', methods=['GET'])
+def installed_apps(device_id):
+    """ Get running apps via HTTP GET. """
+    if not is_valid_device_id(device_id):
+        abort(403)
+    if device_id not in devices:
+        abort(404)
+    return jsonify(installed_apps=devices[device_id].installed_apps())
+
 @app.route('/devices/action/<device_id>/<action_id>', methods=['GET'])
 def device_action(device_id, action_id):
     """ Initiate device action via HTTP GET. """
@@ -164,10 +173,11 @@ def main():
     parser = argparse.ArgumentParser(description='AFTV Server')
     parser.add_argument('-p', '--port', type=int, help='listen port', default=5556)
     parser.add_argument('-d', '--default', help='default Amazon Fire TV host', nargs='?')
+    parser.add_argument('--debug', help='run in debug mode', default=False, action='store_true')
     args = parser.parse_args()
     if args.default and not add('default', args.default):
         exit('invalid hostname')
-    app.run(host='0.0.0.0', port=args.port)
+    app.run(host='0.0.0.0', port=args.port, debug=args.debug)
 
 
 if __name__ == '__main__':

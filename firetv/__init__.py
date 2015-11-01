@@ -92,6 +92,10 @@ class FireTV:
             return STATE_ON
         return STATE_OFF
 
+    def installed_apps(self):
+        """ Returns an array of installed applications """
+        return self._get_packages()
+
     def turn_on(self):
         """ Send power action if device is off. """
         if self.state == STATE_OFF:
@@ -220,3 +224,27 @@ class FireTV:
             print e
             self.connect()
             raise IOError
+
+    def _get_packages(self):
+        """ Lists 3rd party apps.
+
+        :returns: List of 3rd party apps
+        """
+        if not self._adb:
+            return
+        result = []
+        apps = self._adb.StreamingShell('pm list packages -3')
+        try:
+            for bad_line in apps:
+                # The splitting of the StreamingShell doesn't always work
+                # this is to ensure that we get only one line
+                for line in bad_line.splitlines():
+                    package=line.strip().rsplit(':',1)[-1]
+                    if package != '':
+                        result.append(package)
+            return result
+        except InvalidChecksumError as e:
+            print e
+            self.connect()
+            raise IOError
+
