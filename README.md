@@ -26,6 +26,10 @@ If you want to run on a port other than `5556`:
 
 `firetv-server -p XXXX`
 
+If you want to run in debug mode:
+
+`firetv-server --debug`
+
 ### Routes
 
 All routes return JSON.
