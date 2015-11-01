@@ -33,6 +33,7 @@ All routes return JSON.
 - `GET /devices/list` (list all registered devices and state)
 - `GET /devices/connect/<device_id>` (force connection attempt)
 - `GET /devices/state/<device_id>` (return state)
+- `GET /devices/<device_id>/apps/installed` (return installed user apps)
 - `GET /devices/<device_id>/apps/running` (return running user apps)
 - `GET /devices/<device_id>/apps/state/<app_id>` (returns if appid is running)
 - `GET /devices/action/<device_id>/<action_id>` (request action)
@@ -78,6 +79,7 @@ POST JSON in the following format with the HTTP header `Content-Type: applicatio
 
 ### Apps
 
+- `GET /devices/<device_id>/apps/installed`
 - `GET /devices/<device_id>/apps/running`
 - `/devices/<device_id>/apps/state/<app_id>`
 
